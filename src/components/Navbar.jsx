@@ -1,12 +1,12 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import {Link} from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({showGetStarted}) => {
     return (
         <div className="navbar">
             <div/>
             <Link to="/"><h1>Save Todo</h1></Link>
-            <Link to="sign-up"><button>Get Started</button></Link>
+            { showGetStarted && <Link to="sign-up"><button>Get Started</button></Link> }
         </div>
     );
 };
