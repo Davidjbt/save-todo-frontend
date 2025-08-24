@@ -1,13 +1,13 @@
 import React from 'react';
-import GoogleIcon from '../assets/google-icon.svg'
-import FacebookIcon from '../assets/facebook-icon.svg'
+import FacebookIcon from '../assets/facebook-icon.svg';
+import GoogleIcon from '../assets/google-icon.svg';
 import { Link } from 'react-router-dom';
 
-const SignUp = () => {
+const Login = () => {
     return (
         <div className="auth-page">
             <div className="auth-container">
-                <h1>Sign Up</h1>
+                <h1>Login</h1>
 
                 <form method="POST" className="auth-form">
                     <label htmlFor="email">Email:</label><br/>
@@ -15,15 +15,13 @@ const SignUp = () => {
 
                     <label htmlFor="password">Password:</label><br/>
                     <input type="password" name="password" id="password"/><br/>
+                    <p className="auth-forgot-password"><Link to={null}>Forgot password?</Link></p>
 
-                    <label htmlFor="confirmPassword">Confirm password:</label><br/>
-                    <input type="password" name="confirm-password" id="confirm-password"/><br/>
-
-                    <button>Sign Up</button>
+                    <button>Login</button>
                 </form>
 
                 <fieldset>
-                    <legend>Or sign up with:</legend>
+                    <legend>Or login with:</legend>
                 </fieldset>
 
                 <div className="auth-oauth2">
@@ -31,10 +29,10 @@ const SignUp = () => {
                     <img src={GoogleIcon} alt="Google icon"/>
                 </div>
 
-                <p>Already have an account? <Link to="/login">Log in</Link></p>
+                <p>Don't have an account? <Link to="/sign-up">Sign up</Link></p>
             </div>
         </div>
     );
 };
 
-export default SignUp;
+export default Login;
