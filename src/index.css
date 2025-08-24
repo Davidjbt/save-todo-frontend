@@ -36,14 +36,14 @@ a {
     margin-right: 1rem;
 }
 
-/* ---- SIGN UP PAGE ---- */
+/* ---- SIGN UP & LOGIN  ---- */
 
-.sign-up-page {
+.auth-page {
     height: 75vh;
     align-content: center;
 }
 
-.sign-up-div {
+.auth-container {
     width: 20.5rem;
     border: 1px black solid;
     border-radius: 10px;
@@ -51,17 +51,17 @@ a {
     padding: 1rem;
 }
 
-.sign-up-div h1 {
+.auth-container h1 {
     text-align: center;
     font-size: 2.25rem;
     margin-bottom: 2rem;
 }
 
-.form label {
+.auth-form label {
     font-size: 1.25rem;
 }
 
-.form input {
+.auth-form input {
     font-size: 1rem;
     border-radius: 7px;
     border-width: 1px;
@@ -71,7 +71,7 @@ a {
     width: 100%;
 }
 
-.form button {
+.auth-form button {
     display: block;
     justify-self: center;
     background-color: #2FAAC5;
@@ -84,32 +84,45 @@ a {
     margin: 0.5rem 0;
 }
 
-.sign-up-div fieldset {
+.auth-container fieldset {
     text-align: center;
     border: 1px none #AAA;
     border-top-style: solid;
     margin-top: 1rem;
 }
 
-.sign-up-div fieldset legend {
+.auth-container fieldset legend {
     padding: 0.3125rem 0.75rem;
 }
 
-.oauth2 {
+.auth-oauth2 {
     text-align: center;
 }
 
-.oauth2 img {
+.auth-oauth2 img {
     width: 2.1875rem;
     margin: 0.625rem 1.25rem;
 }
 
-.sign-up-div h5 {
+.auth-container > p {
     text-align: center;
     font-weight: normal;
+    font-size: 0.83rem;
 }
 
-.sign-up-div h5 a {
+.auth-container p a {
     font-weight: bold;
     color: #2FAAC5;
+}
+
+/* ---- LOGIN ---- */
+
+.auth-form input[id="password"] {
+    margin-bottom: 2px;
+}
+
+.auth-forgot-password {
+    text-align: right;
+    font-size: 0.83rem;
+    margin-bottom: 1.5rem;
 }
