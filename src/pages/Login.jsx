@@ -1,20 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FacebookIcon from '../assets/facebook-icon.svg';
 import GoogleIcon from '../assets/google-icon.svg';
 import { Link } from 'react-router-dom';
+import FormInput from '../components/FormInput.jsx';
 
 const Login = () => {
+    const [formValues, setFormValues] = useState({
+        email: "",
+        password: ""
+    })
+
+    const onChange = (event) => {
+        setFormValues({...formValues, [event.target.name]: event.target.value})
+    }
+
     return (
         <div className="auth-page">
             <div className="auth-container">
                 <h1>Login</h1>
 
-                <form method="POST" className="auth-form">
-                    <label htmlFor="email">Email:</label><br/>
-                    <input type="text" name="email" id="email"/><br/>
+                <form method="POST" className="auth-form" noValidate>
+                    <FormInput
+                        id="login-email"
+                        label="Email:"
+                        type="email"
+                        name="email"
+                        value={formValues.email}
+                        onChange={onChange}
+                        pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
+                        errorMessage="Invalid email format!"
+                    />
 
-                    <label htmlFor="password">Password:</label><br/>
-                    <input type="password" name="password" id="password"/><br/>
+                    <FormInput
+                        id="login-password"
+                        label="Password:"
+                        type="password"
+                        name="password"
+                        value={formValues.password}
+                        onChange={onChange}
+                        required
+                        errorMessage="Not empty"
+                    />
                     <p className="auth-forgot-password"><Link to={null}>Forgot password?</Link></p>
 
                     <button>Login</button>

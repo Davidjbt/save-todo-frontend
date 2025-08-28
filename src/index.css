@@ -115,14 +115,41 @@ a {
     color: #2FAAC5;
 }
 
+.auth-form span {
+    display: none;
+    color: red;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-left: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.auth-form input:invalid[touched="true"] {
+    margin-bottom: 0.125rem;
+    border: 1px solid red;
+}
+
+.auth-form input:invalid:focus[touched="true"] {
+    outline-color: red;
+}
+
+.auth-form input:invalid[touched="true"] ~ span {
+    display: block;
+}
+
 /* ---- LOGIN ---- */
 
-.auth-form input[id="password"] {
+.auth-form input[id="login-password"] {
     margin-bottom: 2px;
 }
 
+.auth-form input[id="login-password"] ~ span {
+    margin-bottom: 0
+}
+
 .auth-forgot-password {
-    text-align: right;
+    text-align: left;
     font-size: 0.83rem;
     margin-bottom: 1.5rem;
+    margin-left: 0.3125rem;
 }

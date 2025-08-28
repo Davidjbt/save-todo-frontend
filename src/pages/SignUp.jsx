@@ -1,23 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
 import GoogleIcon from '../assets/google-icon.svg'
 import FacebookIcon from '../assets/facebook-icon.svg'
 import { Link } from 'react-router-dom';
+import FormInput from '../components/FormInput.jsx';
 
 const SignUp = () => {
+    const [formValues, setFormValues] = useState({
+        email: "",
+        password: "",
+        confirmPassword: ""
+    })
+
+    const handleSubmit = (event) => {
+        event.preventDefault() // temp
+        // todo: Handle submit
+    }
+
+    const onChange = (event) => {
+        setFormValues({ ...formValues, [event.target.name]: event.target.value })
+    }
+
+    console.log("reloaded")
+    console.log(formValues)
+
     return (
         <div className="auth-page">
             <div className="auth-container">
                 <h1>Sign Up</h1>
 
-                <form method="POST" className="auth-form">
-                    <label htmlFor="email">Email:</label><br/>
-                    <input type="text" name="email" id="email"/><br/>
+                <form onSubmit={handleSubmit} className="auth-form" noValidate>
 
-                    <label htmlFor="password">Password:</label><br/>
-                    <input type="password" name="password" id="password"/><br/>
+                    <FormInput
+                        id="sign-up-email"
+                        label="Email:"
+                        type="email"
+                        name="email"
+                        value={formValues.email}
+                        onChange={onChange}
+                        pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
+                        errorMessage="Invalid email format!"
+                    />
 
-                    <label htmlFor="confirmPassword">Confirm password:</label><br/>
-                    <input type="password" name="confirm-password" id="confirm-password"/><br/>
+                    <FormInput
+                        id="sign-up-password"
+                        label="Password:"
+                        type="password"
+                        name="password"
+                        value={formValues.password}
+                        onChange={onChange}
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$"
+                        errorMessage="Password must be 8-64 characters and include uppercase, lowercase, number and special character!"
+                    />
+
+                    <FormInput
+                        id="sign-up-confirm-password"
+                        label="Confirm password:"
+                        type="password"
+                        name="confirmPassword"
+                        value={formValues.confirmPassword}
+                        onChange={onChange}
+                        pattern={formValues.password}
+                        errorMessage="Passwords must match!"
+                    />
 
                     <button>Sign Up</button>
                 </form>
