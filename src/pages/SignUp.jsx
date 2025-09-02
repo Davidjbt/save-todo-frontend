@@ -11,17 +11,73 @@ const SignUp = () => {
         confirmPassword: ""
     })
 
+    const [touched, setTouched] = useState({
+        email: false,
+        password: false,
+        confirmPassword: false
+    })
+
+    const [errors, setErrors] = useState({
+        email: "",
+        password: "",
+        confirmPassword: ""
+    })
+
     const handleSubmit = (event) => {
-        event.preventDefault() // temp
-        // todo: Handle submit
+        event.preventDefault()
+
+        setTouched({
+            email: true,
+            password: true,
+            confirmPassword: true
+        })
+
+        setErrors(() => {
+            return {
+                email: validators.email(formValues.email),
+                password: validators.password(formValues.password),
+                confirmPassword: validators.confirmPassword(formValues.confirmPassword, formValues)
+            }
+        })
+    }
+
+    const validators = {
+        "email": (value) => {
+            if (!value) return "Email required!"
+            if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value)) return "Invalid email format!"
+            return ""
+        },
+        "password": (value) => {
+            if (!value) return "Password is required!"
+            if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/.test(value))
+                return "Password must be 8-64 characters and include uppercase, lowercase, number and special character!"
+            return ""
+        },
+        "confirmPassword": (value, formValues) => {
+            if (!value) return "Please confirm password!"
+            if (value !== formValues.password) return "Passwords must match!"
+            return ""
+        }
     }
 
     const onChange = (event) => {
-        setFormValues({ ...formValues, [event.target.name]: event.target.value })
+        const { name, value } = event.target
+
+        setFormValues(prev => {
+            const newValues = {...prev, [name]: value}
+            const error = validators[name](value, newValues);
+
+            setErrors(prev => ({ ...prev, [name]: error }))
+
+            return newValues
+        })
     }
 
     console.log("reloaded")
-    console.log(formValues)
+
+    const onBlur = (event) => {
+        setTouched(prev => ({ ...prev, [event.target.name]: true}))
+    }
 
     return (
         <div className="auth-page">
@@ -37,8 +93,9 @@ const SignUp = () => {
                         name="email"
                         value={formValues.email}
                         onChange={onChange}
-                        pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
-                        errorMessage="Invalid email format!"
+                        touched={touched.email}
+                        onBlur={onBlur}
+                        errorMessage={errors.email}
                     />
 
                     <FormInput
@@ -48,8 +105,9 @@ const SignUp = () => {
                         name="password"
                         value={formValues.password}
                         onChange={onChange}
-                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$"
-                        errorMessage="Password must be 8-64 characters and include uppercase, lowercase, number and special character!"
+                        touched={touched.password}
+                        onBlur={onBlur}
+                        errorMessage={errors.password}
                     />
 
                     <FormInput
@@ -59,8 +117,9 @@ const SignUp = () => {
                         name="confirmPassword"
                         value={formValues.confirmPassword}
                         onChange={onChange}
-                        pattern={formValues.password}
-                        errorMessage="Passwords must match!"
+                        touched={touched.confirmPassword}
+                        onBlur={onBlur}
+                        errorMessage={errors.confirmPassword}
                     />
 
                     <button>Sign Up</button>
