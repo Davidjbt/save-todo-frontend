@@ -3,6 +3,7 @@ import GoogleIcon from '../assets/google-icon.svg'
 import FacebookIcon from '../assets/facebook-icon.svg'
 import { Link } from 'react-router-dom';
 import FormInput from '../components/FormInput.jsx';
+import { SignUpValidator } from '../utils/validators/SignUpValidator.js';
 
 const SignUp = () => {
     const [formValues, setFormValues] = useState({
@@ -34,30 +35,11 @@ const SignUp = () => {
 
         setErrors(() => {
             return {
-                email: validators.email(formValues.email),
-                password: validators.password(formValues.password),
-                confirmPassword: validators.confirmPassword(formValues.confirmPassword, formValues)
+                email: SignUpValidator.email(formValues.email),
+                password: SignUpValidator.password(formValues.password),
+                confirmPassword: SignUpValidator.confirmPassword(formValues.confirmPassword, formValues)
             }
         })
-    }
-
-    const validators = {
-        "email": (value) => {
-            if (!value) return "Email required!"
-            if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value)) return "Invalid email format!"
-            return ""
-        },
-        "password": (value) => {
-            if (!value) return "Password is required!"
-            if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/.test(value))
-                return "Password must be 8-64 characters and include uppercase, lowercase, number and special character!"
-            return ""
-        },
-        "confirmPassword": (value, formValues) => {
-            if (!value) return "Please confirm password!"
-            if (value !== formValues.password) return "Passwords must match!"
-            return ""
-        }
     }
 
     const onChange = (event) => {
@@ -65,7 +47,7 @@ const SignUp = () => {
 
         setFormValues(prev => {
             const newValues = {...prev, [name]: value}
-            const error = validators[name](value, newValues);
+            const error = SignUpValidator[name](value, newValues);
 
             setErrors(prev => ({ ...prev, [name]: error }))
 
@@ -85,7 +67,6 @@ const SignUp = () => {
                 <h1>Sign Up</h1>
 
                 <form onSubmit={handleSubmit} className="auth-form" noValidate>
-
                     <FormInput
                         id="sign-up-email"
                         label="Email:"
