@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import GoogleIcon from '../assets/google-icon.svg'
 import FacebookIcon from '../assets/facebook-icon.svg'
 import { Link } from 'react-router-dom';
@@ -24,7 +24,7 @@ const SignUp = () => {
         confirmPassword: ""
     })
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
 
         setTouched({
@@ -33,29 +33,62 @@ const SignUp = () => {
             confirmPassword: true
         })
 
-        setErrors(() => {
-            return {
-                email: SignUpValidator.email(formValues.email),
-                password: SignUpValidator.password(formValues.password),
-                confirmPassword: SignUpValidator.confirmPassword(formValues.confirmPassword, formValues)
-            }
+        const newErrors = {
+            email: SignUpValidator.email(formValues.email),
+            password: SignUpValidator.password(formValues.password),
+            confirmPassword: SignUpValidator.confirmPassword(formValues.confirmPassword, formValues)
+        }
+
+        setErrors(newErrors)
+
+        if (!Object.values(newErrors).every(error => error === ""))
+            return
+
+        const emailAvailabilityError = await SignUpValidator.checkEmailAvailability(formValues.email)
+        console.log(emailAvailabilityError)
+        if (emailAvailabilityError) {
+            setErrors(prev => ({ ...prev, email: emailAvailabilityError}))
+            return
+        }
+
+        const res = await fetch("http://localhost:8070/api/users", {
+            method: "POST",
+            body: JSON.stringify({ // Todo: User microservice takes an extra input for name
+                "email": formValues.email,
+                "password": formValues.password
+            }),
+            headers: new Headers({
+                "Content-type": "application/json"
+            })
         })
+
+        // Todo: expand logic with response
+
+        console.log(res)
     }
+
+    const emailExist = useRef(null);
 
     const onChange = (event) => {
         const { name, value } = event.target
 
         setFormValues(prev => {
             const newValues = {...prev, [name]: value}
-            const error = SignUpValidator[name](value, newValues);
+            const error = SignUpValidator[name](value, newValues)
 
             setErrors(prev => ({ ...prev, [name]: error }))
+
+            if (name === "email" && error === "") {
+                clearTimeout(emailExist.current)
+                emailExist.current = setTimeout(async () => {
+                    const asyncError = await SignUpValidator.checkEmailAvailability(value)
+                    setErrors(prev => ({ ...prev, [name]: asyncError}))
+                }, 2000)
+            }
 
             return newValues
         })
     }
-
-    console.log("reloaded")
 
     const onBlur = (event) => {
         setTouched(prev => ({ ...prev, [event.target.name]: true}))
